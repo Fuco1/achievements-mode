@@ -137,9 +137,14 @@ at the highest level."
               (setf amode-achievements (delete* id amode-achievements :key (function car))))
             (amode-save-to-disc)))))))
 
+(defgroup achievements-mode nil
+  "Achievements for emacs!"
+  :prefix "amode-")
 
 (defcustom amode-save-file "~/.emacs.d/achievements"
-  "Achievements are stored here upon exiting emacs.")
+  "Achievements are stored here upon exiting emacs."
+  :group 'achievements-mode
+  :type 'file)
 
 ;; make sure to remove achievements that has max level already achieved
 (defun amode-load-from-disc ()
