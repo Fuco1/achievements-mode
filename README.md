@@ -32,3 +32,5 @@ Then call the macro `amode-add-achievement` to register the achievement into the
 ```
 
 When you come up with a fun achievement for other users, please implement it and send a pull request! The more achievements we have, the more fun this will be! Contributing an achievement is also an achievement!
+
+Achievements are defined in file `achievements-list.el`, so don't peek in or you can ruin yourself the fun! However, if you want to contribute, you should place the code there. You can also check the code to get inspiration if you don't know how to write the handlers.
