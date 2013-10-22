@@ -31,6 +31,34 @@ Then call the macro `amode-add-achievement` to register the achievement into the
  )
 ```
 
+Each achievement can store a persistent state. You can access and mutate these data by  using the following functions:
+
+* `(amode-get-achievement-data id)` - return the plist containing the persisting data for achievement `id`. This automatically contains `:level` attribute containing the current level of this achievement. To further query this plist, use `(plist-get plist :property)`.
+* `(amode-set-achievement-data id prop data)` - set the property `prop` of achievement `id` to `data`.
+
+Here's a complete example of an achievement that saves additional state and has multiple levels:
+
+```scheme
+;; --if-let is defined in dash.el
+(defun amode-achievement-arrow-in-a-row (&optional level)
+  (when (memq last-command-event '(left right up down))
+    (let* ((data (amode-get-achievement-data "ARROW_COMBO"))
+           (repeat (--if-let (plist-get data :repeat) it 0)))
+      (if (>= repeat (nth level '(5 10)))
+          t
+        (amode-set-achievement-data "ARROW_COMBO" :repeat (1+ repeat))
+        nil))))
+
+(amode-add-achievement
+ "ARROW_COMBO"
+ "Hit arrow keys several times in a row."
+ 2
+ ("Sharpshooter." "Master marksman.")
+ ("Hit the arrow key 5 times in a row."
+  "Hit the arrow key 10 times in a row.")
+ amode-achievement-arrow-in-a-row)
+```
+
 When you come up with a fun achievement for other users, please implement it and send a pull request! The more achievements we have, the more fun this will be! Contributing an achievement is also an achievement!
 
-Achievements are defined in file `achievements-list.el`, so don't peek in or you can ruin yourself the fun! However, if you want to contribute, you should place the code there. You can also check the code to get inspiration if you don't know how to write the handlers.
+**Warning**: achievements are defined in file `achievements-list.el`, so don't peek in or you can ruin yourself the fun! However, if you want to contribute, you should place the code there. You can also check the code to get inspiration if you don't know how to write the handlers.
