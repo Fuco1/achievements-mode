@@ -120,7 +120,7 @@ at the highest level."
     (dolist (ament amode-achievements)
       (let* ((id (car ament))
              (plist (cdr ament))
-             (current-level (--if-let (plist-get (amode-get-achievement-data id) :level) it 0)))
+             (current-level (or (plist-get (amode-get-achievement-data id) :level) 0)))
         (when (funcall (plist-get plist :handler) current-level)
           ;; achievement unlocked!
           (let* ((name (nth current-level (plist-get plist :level-names)))

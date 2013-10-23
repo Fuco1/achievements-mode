@@ -47,11 +47,10 @@ Each achievement can store a persistent state. You can access and mutate these d
 Here's a complete example of an achievement that saves additional state and has multiple levels:
 
 ```scheme
-;; --if-let is defined in dash.el
 (defun amode-achievement-arrow-in-a-row (&optional level)
   (when (memq last-command-event '(left right up down))
     (let* ((data (amode-get-achievement-data "ARROW_COMBO"))
-           (repeat (--if-let (plist-get data :repeat) it 0)))
+           (repeat (or (plist-get data :repeat) 0)))
       (if (>= repeat (nth level '(5 10)))
           t
         (amode-set-achievement-data "ARROW_COMBO" :repeat (1+ repeat))

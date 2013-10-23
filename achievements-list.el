@@ -66,7 +66,7 @@
 ;; (defun amode-achievement-arrow-in-a-row (&optional level)
 ;;   (when (memq last-command-event '(left right up down))
 ;;     (let* ((data (amode-get-achievement-data "ARROW_COMBO"))
-;;            (repeat (--if-let (plist-get data :repeat) it 0)))
+;;            (repeat (or (plist-get data :repeat) 0)))
 ;;       (if (>= repeat (nth level '(5 10)))
 ;;           t
 ;;         (amode-set-achievement-data "ARROW_COMBO" :repeat (1+ repeat))
