@@ -80,6 +80,10 @@ If such ID is not present, do nothing."
   "Update PROP with DATA for achievement identified by ID."
   `(amode-update-plist-data-in-alist ,id amode-achieved-achievements ,prop ,data))
 
+(defmacro amode-set-achievement-data-plist (id plist)
+  "Set plist for achievement ID to PLIST."
+  `(amode-update-plist-in-alist ,id amode-achieved-achievements ,plist))
+
 (defun amode-get-achievement-data (id)
   "Get the data plist associated with achievement ID."
   (cdr (assoc id amode-achieved-achievements)))
@@ -103,7 +107,7 @@ For the description of arguments, see `amode-achievements'."
                      :handler handler)))
     (amode-update-plist-in-alist id amode-achievements ament)
     (unless (assoc id amode-achieved-achievements)
-      (amode-update-plist-in-alist id amode-achieved-achievements (list :level 0)))))
+      (amode-set-achievement-data-plist id (list :level 0)))))
 
 
 ;;; the rest :P
@@ -149,7 +153,14 @@ at the highest level."
 ;; make sure to remove achievements that has max level already achieved
 (defun amode-load-from-disc ()
   (when (file-exists-p amode-save-file)
-    (load amode-save-file t)))
+    (load amode-save-file t)
+    ;; remove the max-level achievements
+    (dolist (ament amode-achievements)
+      (let* ((id (car ament))
+             (plist (cdr ament))
+             (current-level (plist-get (amode-get-achievement-data id) :level)))
+        (when (= current-level (plist-get plist :levels))
+          (setf amode-achievements (delete* id amode-achievements :key (function car))))))))
 
 (defun amode-save-to-disc ()
   (with-temp-file amode-save-file
@@ -160,7 +171,10 @@ at the highest level."
     (insert ";; Do not edit it manually, otherwise you'll spoil yourself the fun!")
     (newline)
     (newline)
-    (insert (format "(setq-default amode-achieved-achievements '%S)" amode-achieved-achievements))))
+    (--each amode-achieved-achievements
+      (insert (format "(amode-set-achievement-data-plist %S (list %s))\n"
+                      (car it)
+                      (mapconcat (lambda (x) (format "%S" x)) (cdr it) " "))))))
 
 (define-minor-mode achievements-mode
   "Turn on achievements mode.  This will install a post-command
@@ -168,16 +182,15 @@ hook that will record activity and update the achievements."
   :global t
   :lighter " AchieveMode"
   (if achievements-mode
-      (progn
-        (unless amode-achieved-achievements
-          (amode-load-from-disc))
-        (add-hook 'post-command-hook 'amode-post-command-handler))
+      (add-hook 'post-command-hook 'amode-post-command-handler)
     (remove-hook 'post-command-hook 'amode-post-command-handler)
     (amode-save-to-disc)))
 
 (add-hook 'kill-emacs-hook 'amode-save-to-disc)
 
 (require 'achievements-list)
+(amode-load-from-disc)
+
 (provide 'achievements-mode)
 
 ;;; achievements-mode.el ends here
