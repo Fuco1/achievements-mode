@@ -10,6 +10,14 @@ Switch to buffer `*achievements*` to read the description and information about 
 
 To list all earned achievements do `not-implemented-yet`.
 
+# Installation
+
+The easiest way is to install this via `package.el` from MELPA repository. If you want to install manually, clone the git repo and add it to your `load-path`.
+
+This package depends on `dash.el` [dash.el](https://github.com/magnars/dash.el) and `f.el` [f.el](https://github.com/rejeep/f.el). If you don't install this package from MELPA, then you'll need to put these two packages on your `load-path` manually as well. See their web pages for install information.
+
+You should customize `achievements-mode` to enable itself on emacs startup so you won't miss any fun.
+
 # Contribute achievements!
 
 Writing achievements is really easy, all it takes is one function and one call to register the achievement.
