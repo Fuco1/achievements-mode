@@ -29,6 +29,12 @@
 ;; was achieved or nil if it wasn't.  If you define multi-level
 ;; achievement, you get the current level as argument LEVEL
 
+;;; helpers
+
+(defun plist-get-zero (plist key)
+  (or (plist-get plist key) 0))
+
+
 ;;;;;;;;;; run tutorial
 (defun amode-achievement-run-tutorial (&optional level)
   (eq this-command 'help-with-tutorial))
@@ -58,6 +64,31 @@
  ("Cheating Bastard.")
  ("Open achievements-list.el in a buffer.")
  amode-achievement-cheating-bastard)
+
+;;;;;;;;;; use "emacs" navigation, not arrow keys
+(defun amode-achievement-emacs-navigation (&optional level)
+  (let* ((data (amode-get-achievement-data "NO_ARROWS"))
+         (cur (plist-get-zero data :data))
+         new)
+    (when (and (eq this-command 'forward-char) (not (eq last-command-event 'right)))
+      (setq new (logior cur 1)))
+    (when (and (eq this-command 'backward-char) (not (eq last-command-event 'left)))
+      (setq new (logior cur 2)))
+    (when (and (eq this-command 'previous-line) (not (eq last-command-event 'up)))
+      (setq new (logior cur 4)))
+    (when (and (eq this-command 'next-line) (not (eq last-command-event 'down)))
+      (setq new (logior cur 8)))
+    (if (= 15 new) t
+      (amode-set-achievement-data "NO_ARROWS" :data new)
+      nil)))
+
+(amode-add-achievement
+ "NO_ARROWS"
+ "Use the emacs style navigation instead of arrow keys."
+ 1
+ ("Look Ma', no arrowkeys!")
+ ("Navigate the cursor up, down, forward and backward without using arrow keys.")
+ amode-achievement-emacs-navigation)
 
 ;; Here's a definition of a multi-level achievements that also uses
 ;; state data. This is so silly it's not added by default. Maybe we
