@@ -65,6 +65,18 @@
  ("Open achievements-list.el in a buffer.")
  amode-achievement-cheating-bastard)
 
+;;;;;;;;;; start evil mode
+(defun amode-achievement-evil (&optional level)
+  (eq this-command 'evil-mode))
+
+(amode-add-achievement
+ "EVIL_MODE"
+ "Enable evil-mode."
+ 1
+ ("Tempted by The Dark Side.")
+ ("Enable evil-mode.")
+ amode-achievement-evil)
+
 ;;;;;;;;;; use "emacs" navigation, not arrow keys
 (defun amode-achievement-emacs-navigation (&optional level)
   (let* ((data (amode-get-achievement-data "NO_ARROWS"))
