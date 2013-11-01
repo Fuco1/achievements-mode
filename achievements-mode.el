@@ -141,7 +141,7 @@ at the highest level."
             (amode-set-achievement-data id :level current-level)
             ;; remove the achievement from the list if max level is reached.
             (when (= current-level (plist-get plist :levels))
-              (setf amode-achievements (delete* id amode-achievements :key (function car))))
+              (setf amode-achievements (cl-delete id amode-achievements :key (function car))))
             (amode-save-to-disc)))))))
 
 (defgroup achievements-mode nil
@@ -163,7 +163,7 @@ at the highest level."
              (plist (cdr ament))
              (current-level (plist-get (amode-get-achievement-data id) :level)))
         (when (= current-level (plist-get plist :levels))
-          (setf amode-achievements (delete* id amode-achievements :key (function car))))))))
+          (setf amode-achievements (cl-delete id amode-achievements :key (function car))))))))
 
 (defun amode-save-to-disc ()
   (with-temp-file amode-save-file
