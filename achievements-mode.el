@@ -146,6 +146,7 @@ at the highest level."
 
 (defgroup achievements-mode nil
   "Achievements for emacs!"
+  :group 'games
   :prefix "amode-")
 
 (defcustom amode-save-file "~/.emacs.d/achievements"
