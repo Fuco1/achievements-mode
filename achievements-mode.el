@@ -127,7 +127,10 @@ at the highest level."
                  (current-level (1+ current-level)))
             (message "ACHIEVEMENT UNLOCKED: %s Check *achievements* for details." name)
             (with-current-buffer (get-buffer-create "*achievements*")
-              (erase-buffer)
+              (goto-char (point-min))
+              (when (> (buffer-size) 0)
+                (insert "\n----------------------------------------\n\n")
+                (goto-char (point-min)))
               (insert (format "ACHIEVEMENT UNLOCKED: %s [Level: %d/%d]\n\n%s\n\n"
                               name current-level (plist-get plist :levels) (plist-get plist :desc)))
               (dotimes (i current-level)
