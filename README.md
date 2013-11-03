@@ -1,3 +1,7 @@
+# DEPRECATED
+
+**This mode is now deprecated in favor of https://bitbucket.org/gvol/emacs-achievements (of which I was unaware). That package already has hundreds of achievements, nicer API and is in general more "worked out". I'm in contact with the author and we working on merging the missing features over.**
+
 # achievements-mode
 
 Achievements for emacs!
