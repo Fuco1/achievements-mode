@@ -65,6 +65,11 @@
  ("Open achievements-list.el in a buffer.")
  amode-achievement-cheating-bastard)
 
+;;;;;;;;;; .emacs/init.el length
+(defun amode-achievement-dot-emacs-hoarded (&optional level)
+
+  )
+
 ;;;;;;;;;; start evil mode
 (defun amode-achievement-evil (&optional level)
   (eq this-command 'evil-mode))
@@ -101,6 +106,59 @@
  ("Look Ma', no arrowkeys!")
  ("Navigate the cursor up, down, forward and backward without using arrow keys.")
  amode-achievement-emacs-navigation)
+
+;;;;;;;;;; save buffer number of times
+(defun amode-achievement-save-buffer (&optional level)
+  (when (eq this-command 'save-buffer)
+    (let* ((data (amode-get-achievement-data "SAVE_BUFFER"))
+           (repeat (plist-get-zero data :repeat)))
+      (if (>= repeat (nth level '(10 40 160 640 2560)))
+          t
+        (amode-set-achievement-data "SAVE_BUFFER" :repeat (1+ repeat))
+        nil))))
+
+(amode-add-achievement
+ "SAVE_BUFFER"
+ "Preserve information for future generations."
+ 5
+ ("Scribe."
+  ""
+  "Library of Alexandria."
+  ""
+  "Brotherhood of Steel.")
+ ("Save 10 buffers. Warmup."
+  "Save 40 buffers. Now you're getting started!"
+  "Save 160 buffers. Be careful to not burn your hard drive."
+  "Save 640 buffers. "
+  "Save 2560 buffers. Your data will survive the Apocalypse itself!")
+ amode-achievement-save-buffer)
+
+;;;;;;;;;; visit bunch of files
+;; (defun amode-achievement-visit-files (&optional level)
+;;   ;; add commands that can open files
+;;   (when (memq this-command '(find-file
+;;                              find-file-other-window
+;;                              find-file-other-frame
+;;                              ido-exit-minibuffer
+;;                              ))
+;;     ))
+
+;; (amode-add-achievement
+;;  "VISIT_FILE"
+;;  "Dig up the secrets of the past."
+;;  5
+;;  (""
+;;   "The Nosy One"
+;;   ""
+;;   "Treasure Hunter."
+;;   "Heinrich Schliemann.")
+;;  ("Visit 10 files. "
+;;   "Visit 40 files. Just don't get *too* curious!"
+;;   "Visit 160 files. "
+;;   "Visit 640 files. Not quite Indiana Jones, but you're getting there."
+;;   "Visit 2560 files. Nothing can stay hidden from you.")
+;;  amode-achievement-visit-files
+;;  )
 
 ;; Here's a definition of a multi-level achievements that also uses
 ;; state data. This is so silly it's not added by default. Maybe we
